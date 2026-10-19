@@ -479,23 +479,11 @@ body {
 }
 
 .letter-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  width: 56px;
+  height: 2px;
+  background: linear-gradient(90deg, #e88ba7, #f7d3dd);
+  border-radius: 2px;
   margin-bottom: 24px;
-}
-
-.letter-divider::before,
-.letter-divider::after {
-  content: '';
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #e8a9ba, transparent);
-  flex: 1;
-}
-
-.letter-divider span {
-  font-size: 1.1rem;
-  color: var(--primary-rose);
 }
 
 .letter-body p {

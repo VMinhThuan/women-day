@@ -57,8 +57,8 @@ function showToast(message) {
 }
 
 // Flower Rain Effect
-const flowerEmojis = ['🌸', '🌷', '✨', '💖', '🌼', '💐', '🎀'];
-function triggerFlowerRain(count = 35) {
+const flowerEmojis = ['🌸', '❀'];
+function triggerFlowerRain(count = 30) {
   for (let i = 0; i < count; i++) {
     const flower = document.createElement('span');
     flower.className = 'flower-pop';
@@ -159,8 +159,8 @@ document.querySelectorAll('.wish-card').forEach((card) => {
 if (rainBtn) {
   rainBtn.addEventListener('click', () => {
     playSweetChime();
-    showToast('Chúc chị Nhi ngày 20/10 luôn tươi vui, rạng ngời và ngập tràn hạnh phúc! 🌸💖');
-    triggerFlowerRain(40);
+    showToast('Chúc chị Nhi ngày 20/10 luôn tươi vui, rạng ngời và ngập tràn hạnh phúc.');
+    triggerFlowerRain(35);
   });
 }
 
