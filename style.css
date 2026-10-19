@@ -32,49 +32,42 @@ body {
   position: relative;
 }
 
-/* Floating ambient particles (Pink Dreamy Glow) */
+/* Floating ambient particles (Pink Dreamy Glow - GPU Optimized) */
 .bg-glow {
   position: fixed;
   border-radius: 50%;
-  filter: blur(85px);
-  opacity: 0.55;
+  filter: blur(55px);
+  opacity: 0.5;
   pointer-events: none;
   z-index: 0;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .bg-glow-1 {
-  width: 420px;
-  height: 420px;
+  width: 400px;
+  height: 400px;
   background: #ffb3c7;
   top: -60px;
   left: -80px;
 }
 
 .bg-glow-2 {
-  width: 460px;
-  height: 460px;
+  width: 440px;
+  height: 440px;
   background: #ffa8bf;
   bottom: -90px;
   right: -90px;
 }
 
-.bg-glow-3 {
-  width: 380px;
-  height: 380px;
-  background: #ffd6e6;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.45;
-}
-
 .petal-particle {
   position: fixed;
-  opacity: 0.75;
+  opacity: 0.8;
   pointer-events: none;
   z-index: 1;
   animation: floatParticle 8s ease-in-out infinite;
-  filter: drop-shadow(0 2px 6px rgba(230, 84, 125, 0.25));
+  text-shadow: 0 2px 8px rgba(230, 84, 125, 0.25);
+  will-change: transform;
 }
 
 .p1 { top: 10%; left: 7%; animation-delay: 0s; font-size: 22px; }
@@ -100,7 +93,8 @@ body {
   justify-content: center;
   background: radial-gradient(circle at center, #fff5f8 0%, #ffdeec 50%, #f7bed4 100%);
   padding: 24px;
-  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.8s;
+  transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.5s;
+  will-change: opacity, visibility;
 }
 
 .gift-gate.opened {
@@ -368,8 +362,9 @@ body {
   object-position: top center;
   display: block;
   filter: blur(16px) brightness(1.12);
-  transform: scale(1.08);
-  transition: filter 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1.05);
+  transition: filter 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: filter, transform;
 }
 
 .art-panel.revealed .hero-image {
@@ -381,7 +376,7 @@ body {
   transform: scale(1.03);
 }
 
-/* Mosaic curtain dissolve effect */
+/* Hiệu ứng lật 3D từng mảnh ảnh (Staggered 3D Flip Reveal) */
 .mosaic-curtain {
   position: absolute;
   inset: 0;
@@ -389,40 +384,42 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  padding: 2px;
+  gap: 3px;
+  padding: 3px;
+  perspective: 800px;
   pointer-events: none;
 }
 
 .mosaic-piece {
-  background: linear-gradient(135deg, rgba(255, 228, 238, 0.95), rgba(255, 202, 222, 0.9));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(255, 226, 238, 0.96) 0%, rgba(255, 196, 218, 0.94) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(230, 84, 125, 0.15);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg) scale(1);
   opacity: 1;
-  transform: scale(1);
-  filter: blur(0px);
-  transition: opacity 0.75s ease, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.55s ease;
+  will-change: transform, opacity;
 }
 
-/* Staggered tiles dissolve */
-.art-panel.revealed .mosaic-piece:nth-child(1) { transition-delay: 0.05s; }
-.art-panel.revealed .mosaic-piece:nth-child(2) { transition-delay: 0.18s; }
-.art-panel.revealed .mosaic-piece:nth-child(3) { transition-delay: 0.3s; }
-.art-panel.revealed .mosaic-piece:nth-child(4) { transition-delay: 0.42s; }
-.art-panel.revealed .mosaic-piece:nth-child(5) { transition-delay: 0.54s; }
-.art-panel.revealed .mosaic-piece:nth-child(6) { transition-delay: 0.66s; }
-.art-panel.revealed .mosaic-piece:nth-child(7) { transition-delay: 0.78s; }
-.art-panel.revealed .mosaic-piece:nth-child(8) { transition-delay: 0.9s; }
-.art-panel.revealed .mosaic-piece:nth-child(9) { transition-delay: 1.02s; }
-.art-panel.revealed .mosaic-piece:nth-child(10) { transition-delay: 1.14s; }
-.art-panel.revealed .mosaic-piece:nth-child(11) { transition-delay: 1.26s; }
-.art-panel.revealed .mosaic-piece:nth-child(12) { transition-delay: 1.38s; }
+/* Staggered 3D Flip */
+.art-panel.revealed .mosaic-piece:nth-child(1)  { transition-delay: 0.04s; }
+.art-panel.revealed .mosaic-piece:nth-child(2)  { transition-delay: 0.12s; }
+.art-panel.revealed .mosaic-piece:nth-child(3)  { transition-delay: 0.20s; }
+.art-panel.revealed .mosaic-piece:nth-child(4)  { transition-delay: 0.28s; }
+.art-panel.revealed .mosaic-piece:nth-child(5)  { transition-delay: 0.36s; }
+.art-panel.revealed .mosaic-piece:nth-child(6)  { transition-delay: 0.44s; }
+.art-panel.revealed .mosaic-piece:nth-child(7)  { transition-delay: 0.52s; }
+.art-panel.revealed .mosaic-piece:nth-child(8)  { transition-delay: 0.60s; }
+.art-panel.revealed .mosaic-piece:nth-child(9)  { transition-delay: 0.68s; }
+.art-panel.revealed .mosaic-piece:nth-child(10) { transition-delay: 0.76s; }
+.art-panel.revealed .mosaic-piece:nth-child(11) { transition-delay: 0.84s; }
+.art-panel.revealed .mosaic-piece:nth-child(12) { transition-delay: 0.92s; }
 
 .art-panel.revealed .mosaic-piece {
+  transform: rotateY(92deg) scale(0.65);
   opacity: 0;
-  transform: scale(0.35) rotate(10deg);
-  filter: blur(12px);
 }
 
 .art-overlay {

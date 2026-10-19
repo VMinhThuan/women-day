@@ -59,18 +59,23 @@ function initRefreshRateDetection() {
 }
 initRefreshRateDetection();
 
-// Đo Safe Area Inset Top (phân biệt Dynamic Island >= 50px và Tai thỏ Notch ~ 44-47px)
-function getSafeAreaTop() {
+// Đo và cache Safe Area Inset Top 1 lần duy nhất lúc khởi động để không làm đứng màn hình khi bấm
+let cachedSafeAreaTop = 0;
+function initSafeAreaMeasurement() {
   try {
     const div = document.createElement('div');
     div.style.cssText = 'position:fixed;top:0;left:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
     document.body.appendChild(div);
-    const topInset = parseInt(window.getComputedStyle(div).paddingTop, 10) || 0;
+    cachedSafeAreaTop = parseInt(window.getComputedStyle(div).paddingTop, 10) || 0;
     document.body.removeChild(div);
-    return topInset;
   } catch (e) {
-    return 0;
+    cachedSafeAreaTop = 0;
   }
+}
+initSafeAreaMeasurement();
+
+function getSafeAreaTop() {
+  return cachedSafeAreaTop;
 }
 
 // Nhận diện cụ thể iPhone mấy
@@ -319,20 +324,20 @@ function showToast(message) {
 
 // Flower Rain Effect (Pinkaholic dreamy mix: hoa đào, nơ hồng, tulip, tim hồng, lấp lánh)
 const flowerEmojis = ['🌸', '🎀', '🌷', '💕', '✨', '💐', '🩰'];
-function triggerFlowerRain(count = 30) {
+function triggerFlowerRain(count = 20) {
   for (let i = 0; i < count; i++) {
     const flower = document.createElement('span');
     flower.className = 'flower-pop';
     flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
-    flower.style.left = `${Math.random() * 96 + 2}vw`;
-    flower.style.top = `${-20 - Math.random() * 50}px`;
-    flower.style.setProperty('--x', `${(Math.random() - 0.5) * 200}px`);
-    flower.style.animationDelay = `${Math.random() * 0.55}s`;
-    flower.style.animationDuration = `${2.4 + Math.random() * 1.2}s`;
-    flower.style.fontSize = `${20 + Math.random() * 16}px`;
+    flower.style.left = `${Math.random() * 94 + 3}vw`;
+    flower.style.top = `${-20 - Math.random() * 40}px`;
+    flower.style.setProperty('--x', `${(Math.random() - 0.5) * 160}px`);
+    flower.style.animationDelay = `${Math.random() * 0.4}s`;
+    flower.style.animationDuration = `${2.2 + Math.random() * 1.0}s`;
+    flower.style.fontSize = `${20 + Math.random() * 14}px`;
 
     document.body.appendChild(flower);
-    setTimeout(() => flower.remove(), 4000);
+    setTimeout(() => flower.remove(), 3500);
   }
 }
 
@@ -345,25 +350,25 @@ function openGift() {
     giftBoxBtn.classList.add('opening');
   }
 
-  // Bung hoa chúc mừng ngay khi mở
-  triggerFlowerRain(45);
+  // Bung hoa chúc mừng mượt mà không giật khung hình
+  triggerFlowerRain(20);
 
   setTimeout(() => {
+    if (mainContent) {
+      mainContent.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     if (giftGate) {
       giftGate.classList.add('opened');
     }
-    if (mainContent) {
-      mainContent.classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Kích hoạt hiệu ứng mở ảnh từ từ (Gradual Mosaic & Bloom Reveal)
-      setTimeout(() => {
-        if (artPanelBox) {
-          artPanelBox.classList.add('revealed');
-        }
-      }, 250);
-    }
-  }, 500);
+    // Khi cổng quà tan ra, kích hoạt ngay hiệu ứng lật 3D từng ô ảnh một cách mượt mà
+    setTimeout(() => {
+      if (artPanelBox) {
+        artPanelBox.classList.add('revealed');
+      }
+    }, 300);
+  }, 380);
 }
 
 if (giftBoxBtn) giftBoxBtn.addEventListener('click', openGift);
