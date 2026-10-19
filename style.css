@@ -348,6 +348,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   display: block;
   transition: transform 0.8s ease;
 }
@@ -517,17 +518,19 @@ body {
 
 .card-img-wrap {
   width: 100%;
-  height: 180px;
+  height: 220px;
   overflow: hidden;
   background: #fce2ea;
+  position: relative;
 }
 
 .card-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .wish-card:hover .card-img-wrap img {
