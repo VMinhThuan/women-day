@@ -37,6 +37,10 @@ const giftGate = document.getElementById('gift-gate');
 const giftBoxBtn = document.getElementById('gift-box-btn');
 const openGiftBtn = document.getElementById('open-gift-btn');
 const mainContent = document.getElementById('main-content');
+const artPanelBox = document.getElementById('art-panel-box');
+const imageModal = document.getElementById('image-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const modalBackdrop = document.getElementById('modal-backdrop');
 const toast = document.getElementById('toast');
 const rainBtn = document.getElementById('rain-btn');
 const rewatchBtn = document.getElementById('rewatch-btn');
@@ -71,7 +75,7 @@ function triggerFlowerRain(count = 35) {
   }
 }
 
-// Open Gift Handler
+// Open Gift Handler & Gradual Image Reveal
 function openGift() {
   playSweetChime();
   if (giftBoxBtn) {
@@ -88,12 +92,56 @@ function openGift() {
     if (mainContent) {
       mainContent.classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Kích hoạt hiệu ứng mở ảnh từ từ (Gradual Mosaic & Bloom Reveal)
+      setTimeout(() => {
+        if (artPanelBox) {
+          artPanelBox.classList.add('revealed');
+        }
+      }, 250);
     }
   }, 500);
 }
 
 if (giftBoxBtn) giftBoxBtn.addEventListener('click', openGift);
 if (openGiftBtn) openGiftBtn.addEventListener('click', openGift);
+
+// Lightbox Modal: Mở và đóng full ảnh
+function openFullImageModal() {
+  playSweetChime();
+  if (imageModal) {
+    imageModal.classList.add('active');
+    imageModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeFullImageModal() {
+  if (imageModal) {
+    imageModal.classList.remove('active');
+    imageModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+}
+
+if (artPanelBox) {
+  artPanelBox.addEventListener('click', openFullImageModal);
+  artPanelBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openFullImageModal();
+    }
+  });
+}
+
+if (closeModalBtn) closeModalBtn.addEventListener('click', closeFullImageModal);
+if (modalBackdrop) modalBackdrop.addEventListener('click', closeFullImageModal);
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeFullImageModal();
+  }
+});
 
 // Wish Cards Interactive
 document.querySelectorAll('.wish-card').forEach((card) => {
@@ -111,14 +159,16 @@ document.querySelectorAll('.wish-card').forEach((card) => {
 if (rainBtn) {
   rainBtn.addEventListener('click', () => {
     playSweetChime();
-    showToast('Chúc chị Nhi ngày 20/10 ngập tràn niềm vui và luôn nở nụ cười thật tươi! 🌸💖');
+    showToast('Chúc chị Nhi ngày 20/10 luôn tươi vui, rạng ngời và ngập tràn hạnh phúc! 🌸💖');
     triggerFlowerRain(40);
   });
 }
 
-// Rewatch Button (Đóng lại để mở quà lại)
+// Rewatch Button (Đóng lại để mở quà lại từ đầu)
 if (rewatchBtn) {
   rewatchBtn.addEventListener('click', () => {
+    closeFullImageModal();
+    if (artPanelBox) artPanelBox.classList.remove('revealed');
     if (mainContent) mainContent.classList.add('hidden');
     if (giftBoxBtn) giftBoxBtn.classList.remove('opening');
     if (giftGate) giftGate.classList.remove('opened');

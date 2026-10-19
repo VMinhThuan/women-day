@@ -60,10 +60,17 @@
     
     <!-- Hero Letter Card -->
     <section class="hero-card" aria-labelledby="card-title">
-      <div class="art-panel">
-        <img src="assets/princess-bouquet.png" alt="Công chúa và hoa ngọt ngào" class="hero-image">
+      <div id="art-panel-box" class="art-panel" role="button" tabindex="0" aria-label="Bấm để xem ảnh đầy đủ">
+        <div class="mosaic-curtain" aria-hidden="true">
+          <span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span>
+          <span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span>
+          <span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span><span class="mosaic-piece"></span>
+        </div>
+        <img id="hero-img" src="assets/princess-bouquet.png" alt="Công chúa và hoa ngọt ngào" class="hero-image">
         <div class="art-overlay"></div>
-        <div class="art-badge">Happy Women's Day 20.10 🌸</div>
+        <div class="art-badge zoomable">
+          <span>🔍</span> Chạm xem full ảnh ✨
+        </div>
       </div>
       
       <div class="letter-panel">
@@ -148,6 +155,21 @@
       <p>Happy Vietnamese Women's Day · 20.10 ✨</p>
     </footer>
   </main>
+
+  <!-- Full Image Lightbox Modal -->
+  <div id="image-modal" class="image-modal" aria-hidden="true" role="dialog" aria-label="Xem full ảnh">
+    <div id="modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <button id="close-modal-btn" class="modal-close-btn" aria-label="Đóng">&times;</button>
+      <div class="modal-img-container">
+        <img src="assets/princess-bouquet.png" alt="Ảnh chân dung công chúa đầy đủ" class="modal-full-img">
+      </div>
+      <div class="modal-caption-bar">
+        <p class="modal-title">Happy Vietnamese Women's Day 🌸 20.10</p>
+        <p class="modal-sub">Chúc chị Nhi luôn tươi vui &amp; rạng ngời như đóa hoa đẹp nhất ✨</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Notification Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
