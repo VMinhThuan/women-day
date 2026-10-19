@@ -807,7 +807,8 @@ body {
   pointer-events: none;
   font-size: 26px;
   animation: fallAnimation 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  filter: drop-shadow(0 2px 5px rgba(230, 84, 125, 0.3));
+  text-shadow: 0 2px 6px rgba(230, 84, 125, 0.25);
+  will-change: transform, opacity;
 }
 
 @keyframes fallAnimation {
@@ -821,6 +822,36 @@ body {
   }
   100% {
     transform: translate(var(--x), 105vh) rotate(480deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Hiệu ứng hoa & nơ hồng rơi nhẹ khi cuộn trang (Pinkaholic Scroll Shower) */
+.scroll-petal {
+  position: fixed;
+  top: -24px;
+  z-index: 60;
+  pointer-events: none;
+  user-select: none;
+  animation: scrollPetalDrift 2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  text-shadow: 0 2px 8px rgba(230, 84, 125, 0.25);
+  will-change: transform, opacity;
+}
+
+@keyframes scrollPetalDrift {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0.65);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+    transform: translateY(12vh) rotate(35deg) scale(1.08);
+  }
+  75% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(var(--drift-x, 40px), 82vh) rotate(190deg) scale(0.75);
     opacity: 0;
   }
 }

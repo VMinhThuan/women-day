@@ -450,3 +450,45 @@ if (rewatchBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+// =========================================
+// HIỆU ỨNG HOA & NƠ HỒNG RƠI KHI CUỘN TRANG (Pinkaholic Scroll Flower Shower)
+// =========================================
+let lastScrollY = window.scrollY;
+let lastScrollSpawnTime = 0;
+
+function createScrollPetal() {
+  const flower = document.createElement('span');
+  flower.className = 'scroll-petal';
+  flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+
+  // Rơi ngẫu nhiên từ vị trí ngang bất kỳ trên màn hình
+  const startX = Math.random() * 92 + 4; // 4vw đến 96vw
+  flower.style.left = `${startX}vw`;
+
+  const driftX = (Math.random() - 0.5) * 160; // Gió thổi lượn nhẹ trái/phải
+  flower.style.setProperty('--drift-x', `${driftX}px`);
+  flower.style.fontSize = `${18 + Math.random() * 12}px`;
+  flower.style.animationDuration = `${2.2 + Math.random() * 0.8}s`;
+
+  document.body.appendChild(flower);
+  setTimeout(() => flower.remove(), 2800);
+}
+
+window.addEventListener('scroll', () => {
+  // Chỉ thả hoa khi hộp quà đã mở (đang xem thiệp chính)
+  if (giftGate && !giftGate.classList.contains('opened')) return;
+
+  const currentScrollY = window.scrollY;
+  const now = performance.now();
+
+  // Chỉ kích hoạt khi cuộn xuống và cách nhau tối thiểu 160ms để mượt 60fps
+  if (currentScrollY > lastScrollY && (now - lastScrollSpawnTime > 160)) {
+    lastScrollSpawnTime = now;
+    createScrollPetal();
+    if (Math.random() > 0.45) {
+      setTimeout(createScrollPetal, 70);
+    }
+  }
+  lastScrollY = currentScrollY;
+}, { passive: true });
