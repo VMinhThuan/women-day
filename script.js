@@ -317,8 +317,8 @@ function showToast(message) {
   }, 4200);
 }
 
-// Flower Rain Effect
-const flowerEmojis = ['🌸', '❀'];
+// Flower Rain Effect (Pinkaholic dreamy mix: hoa đào, nơ hồng, tulip, tim hồng, lấp lánh)
+const flowerEmojis = ['🌸', '🎀', '🌷', '💕', '✨', '💐', '🩰'];
 function triggerFlowerRain(count = 30) {
   for (let i = 0; i < count; i++) {
     const flower = document.createElement('span');
