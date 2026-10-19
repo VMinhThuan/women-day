@@ -32,6 +32,81 @@ function playSweetChime() {
   }
 }
 
+// =========================================
+// HỆ THỐNG THÔNG BÁO BÍ MẬT QUA NTFY.SH/CHINHI-20
+// =========================================
+const NTFY_TOPIC = 'chinhi-20';
+
+function getDeviceInfo() {
+  const ua = navigator.userAgent || '';
+  let os = 'Thiết bị khác';
+  if (/iPhone/i.test(ua)) os = 'iPhone';
+  else if (/iPad/i.test(ua)) os = 'iPad';
+  else if (/Android/i.test(ua)) os = 'Android';
+  else if (/Macintosh|Mac OS X/i.test(ua)) os = 'MacBook/Mac';
+  else if (/Windows/i.test(ua)) os = 'Máy tính Windows';
+
+  let app = '';
+  if (/Zalo/i.test(ua)) app = '(mở từ Zalo)';
+  else if (/FBAN|FBAV|Messenger/i.test(ua)) app = '(mở từ Messenger)';
+  else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) app = '(Safari)';
+  else if (/Chrome/i.test(ua)) app = '(Chrome)';
+
+  return `${os} ${app}`.trim();
+}
+
+function notifyMe(action) {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const isTarget = params.get('to') === 'nhi' || params.has('nhi');
+    const isMe = params.has('me') || localStorage.getItem('is_tester') === 'true';
+
+    // Nếu bạn mở link có ?me=1, hệ thống nhớ đây là máy của bạn
+    if (params.has('me')) {
+      localStorage.setItem('is_tester', 'true');
+    }
+
+    const device = getDeviceInfo();
+    const time = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    let title = '🌸 Có người mở web 20/10';
+    let prefix = '👀 ';
+    let priority = 'default';
+    let tags = 'bell';
+
+    if (isMe) {
+      title = '🛠️ Bạn đang tự test web';
+      prefix = '[Thuận đang test] ';
+      priority = 'low';
+      tags = 'gear';
+    } else if (isTarget) {
+      title = '🎉 CHÍNH XÁC CHỊ NHI ĐÃ MỞ!';
+      prefix = '🎯 [ĐÚNG CHỊ NHI] ';
+      priority = 'high';
+      tags = 'tada,sparkles,heart';
+    }
+
+    const message = `${prefix}${action}\n📱 Thiết bị: ${device}\n⏰ Lúc: ${time}`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+      method: 'POST',
+      headers: {
+        'Title': title,
+        'Priority': priority,
+        'Tags': tags
+      },
+      body: message
+    }).catch(() => {});
+  } catch (e) {
+    // Silent fail
+  }
+}
+
+// Báo ngay khi tải trang web (vừa nhấp link)
+window.addEventListener('DOMContentLoaded', () => {
+  notifyMe('Vừa bấm mở đường link web');
+});
+
 // Elements
 const giftGate = document.getElementById('gift-gate');
 const giftBoxBtn = document.getElementById('gift-box-btn');
@@ -78,6 +153,8 @@ function triggerFlowerRain(count = 30) {
 // Open Gift Handler & Gradual Image Reveal
 function openGift() {
   playSweetChime();
+  notifyMe('Vừa bấm nút MỞ HỘP QUÀ!');
+
   if (giftBoxBtn) {
     giftBoxBtn.classList.add('opening');
   }
@@ -109,6 +186,8 @@ if (openGiftBtn) openGiftBtn.addEventListener('click', openGift);
 // Lightbox Modal: Mở và đóng full ảnh
 function openFullImageModal() {
   playSweetChime();
+  notifyMe('Vừa bấm phóng to xem FULL ẢNH chân dung!');
+
   if (imageModal) {
     imageModal.classList.add('active');
     imageModal.setAttribute('aria-hidden', 'false');
@@ -147,6 +226,10 @@ window.addEventListener('keydown', (e) => {
 document.querySelectorAll('.wish-card').forEach((card) => {
   card.addEventListener('click', () => {
     playSweetChime();
+    const titleEl = card.querySelector('h4');
+    const cardTitle = titleEl ? titleEl.textContent.trim() : 'lời chúc';
+    notifyMe(`Vừa bấm xem thẻ: "${cardTitle}"`);
+
     const msg = card.getAttribute('data-message');
     if (msg) {
       showToast(msg);
@@ -159,6 +242,7 @@ document.querySelectorAll('.wish-card').forEach((card) => {
 if (rainBtn) {
   rainBtn.addEventListener('click', () => {
     playSweetChime();
+    notifyMe('Vừa bấm nút thả mưa hoa chúc mừng!');
     showToast('Chúc chị Nhi ngày 20/10 thật vui vẻ và nhận được nhiều quà!');
     triggerFlowerRain(35);
   });
