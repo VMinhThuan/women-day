@@ -38,6 +38,99 @@ function playSweetChime() {
 const NTFY_TOPIC = 'chinhi-20';
 
 let clientNetwork = '';
+let detectedFps = 60;
+
+// Đo tần số quét màn hình (phân biệt dòng Thường 60Hz và dòng Pro 120Hz ProMotion)
+function initRefreshRateDetection() {
+  try {
+    let frames = 0;
+    let start = performance.now();
+    function step(now) {
+      frames++;
+      if (frames < 15) {
+        requestAnimationFrame(step);
+      } else {
+        const fps = Math.round((frames * 1000) / (now - start));
+        detectedFps = fps > 80 ? 120 : 60;
+      }
+    }
+    requestAnimationFrame(step);
+  } catch (e) {}
+}
+initRefreshRateDetection();
+
+// Đo Safe Area Inset Top (phân biệt Dynamic Island >= 50px và Tai thỏ Notch ~ 44-47px)
+function getSafeAreaTop() {
+  try {
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;top:0;left:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+    document.body.appendChild(div);
+    const topInset = parseInt(window.getComputedStyle(div).paddingTop, 10) || 0;
+    document.body.removeChild(div);
+    return topInset;
+  } catch (e) {
+    return 0;
+  }
+}
+
+// Nhận diện cụ thể iPhone mấy
+function detectSpecificIPhone(w, h, dpr, fps, safeTop) {
+  const is120Hz = fps >= 90;
+  const isDynamicIsland = safeTop >= 50;
+
+  // iPhone 16 Pro Max (đời mới nhất viền mỏng 6.9")
+  if (w === 440 && h === 956) return 'iPhone 16 Pro Max';
+
+  // iPhone 16 Pro (viền mỏng 6.3")
+  if (w === 402 && h === 874) return 'iPhone 16 Pro';
+
+  // Màn hình 6.7" Dynamic Island (430 x 932)
+  if (w === 430 && h === 932) {
+    if (is120Hz) return 'iPhone 14 Pro Max / 15 Pro Max (120Hz)';
+    return 'iPhone 15 Plus / 16 Plus (Dynamic Island)';
+  }
+
+  // Màn hình 6.1" Dynamic Island (393 x 852)
+  if (w === 393 && h === 852) {
+    if (is120Hz) return 'iPhone 14 Pro / 15 Pro (120Hz ProMotion)';
+    return 'iPhone 15 / iPhone 16 (Dynamic Island)';
+  }
+
+  // Màn hình 6.7" Tai thỏ (428 x 926)
+  if (w === 428 && h === 926) {
+    if (is120Hz) return 'iPhone 13 Pro Max (120Hz ProMotion)';
+    return 'iPhone 12 Pro Max / 14 Plus (Tai thỏ 6.7")';
+  }
+
+  // Màn hình 6.1" Tai thỏ (390 x 844)
+  if (w === 390 && h === 844) {
+    if (is120Hz) return 'iPhone 13 Pro (120Hz ProMotion)';
+    return 'iPhone 12 / iPhone 13 / iPhone 14 (Tai thỏ 6.1")';
+  }
+
+  // Màn hình Mini 5.4" (360 x 780)
+  if (w === 360 && h === 780) return 'iPhone 12 mini / 13 mini';
+
+  // Màn hình 414 x 896
+  if (w === 414 && h === 896) {
+    if (dpr === 3) return 'iPhone 11 Pro Max / XS Max';
+    return 'iPhone 11 / iPhone XR (Màn hình 6.1")';
+  }
+
+  // Màn hình 375 x 812
+  if (w === 375 && h === 812) return 'iPhone 11 Pro / iPhone X / XS';
+
+  // Màn hình 414 x 736
+  if (w === 414 && h === 736) return 'iPhone 6 Plus / 7 Plus / 8 Plus';
+
+  // Màn hình 375 x 667
+  if (w === 375 && h === 667) return 'iPhone 6 / 7 / 8 / SE (Gen 2-3)';
+
+  // Màn hình 320 x 568
+  if (w === 320 && h === 568) return 'iPhone 5 / 5s / SE đời đầu';
+
+  return 'iPhone (Apple iOS)';
+}
 
 // Hàm nhận diện chi tiết loại thiết bị & model
 function getDeviceInfo() {
@@ -45,33 +138,23 @@ function getDeviceInfo() {
   const w = Math.min(window.screen.width, window.screen.height);
   const h = Math.max(window.screen.width, window.screen.height);
   const dpr = window.devicePixelRatio || 1;
+  const safeTop = getSafeAreaTop();
 
   let deviceType = 'Điện thoại';
   let model = 'Không rõ model';
+  let hardwareDetails = `${w}x${h} @${dpr}x`;
 
   // 1. Phân loại theo Hệ điều hành & Model
   if (/iPhone/i.test(ua)) {
-    deviceType = 'Điện thoại';
-    // Dự đoán chính xác model iPhone dựa vào độ phân giải màn hình + devicePixelRatio
-    if (w === 440 && h === 956) model = 'iPhone 16 Pro Max';
-    else if (w === 402 && h === 874) model = 'iPhone 16 Pro';
-    else if (w === 430 && h === 932) model = 'iPhone 14 Pro Max / 15 Plus / 15 Pro Max / 16 Plus';
-    else if (w === 393 && h === 852) model = 'iPhone 14 Pro / 15 / 15 Pro / 16';
-    else if (w === 428 && h === 926) model = 'iPhone 12 Pro Max / 13 Pro Max / 14 Plus';
-    else if (w === 390 && h === 844) model = 'iPhone 12 / 12 Pro / 13 / 13 Pro / 14';
-    else if (w === 360 && h === 780) model = 'iPhone 12 mini / 13 mini';
-    else if (w === 414 && h === 896) model = (dpr === 3 ? 'iPhone XS Max / 11 Pro Max' : 'iPhone XR / 11');
-    else if (w === 375 && h === 812) model = 'iPhone X / XS / 11 Pro';
-    else if (w === 414 && h === 736) model = 'iPhone 6+ / 7+ / 8+';
-    else if (w === 375 && h === 667) model = 'iPhone 6 / 7 / 8 / SE';
-    else if (w === 320 && h === 568) model = 'iPhone 5 / 5s / SE 1';
-    else model = 'iPhone (Apple)';
+    deviceType = 'iPhone';
+    model = detectSpecificIPhone(w, h, dpr, detectedFps, safeTop);
+    hardwareDetails += ` • ${detectedFps}Hz${safeTop >= 50 ? ' • Dynamic Island' : (safeTop >= 40 ? ' • Tai thỏ' : '')}`;
   } else if (/iPad/i.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua))) {
     deviceType = 'Máy tính bảng';
     model = 'Apple iPad';
   } else if (/Android/i.test(ua)) {
     const isTablet = !/Mobile/i.test(ua) || Math.min(window.screen.width, window.screen.height) >= 600;
-    deviceType = isTablet ? 'Máy tính bảng' : 'Điện thoại';
+    deviceType = isTablet ? 'Máy tính bảng Android' : 'Điện thoại Android';
 
     // Bắt tên model máy Android từ User Agent (vd: SM-S918B, Redmi Note 11, CPH2269...)
     const match = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\))/i);
@@ -109,7 +192,8 @@ function getDeviceInfo() {
     deviceType,
     model,
     app,
-    screen: `${window.screen.width}x${window.screen.height}`
+    screen: `${window.screen.width}x${window.screen.height}`,
+    hardwareDetails
   };
 }
 
@@ -147,6 +231,7 @@ function notifyMe(action) {
     const messageLines = [
       `${prefix}${action}`,
       `📱 Thiết bị: ${dev.model} (${dev.deviceType})`,
+      `🔍 Thông số: ${dev.hardwareDetails}`,
       `🌐 Ứng dụng: ${dev.app} • Màn hình: ${dev.screen}`,
       `⏰ Lúc: ${time}`
     ];
