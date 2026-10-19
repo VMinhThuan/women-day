@@ -159,7 +159,7 @@ document.querySelectorAll('.wish-card').forEach((card) => {
 if (rainBtn) {
   rainBtn.addEventListener('click', () => {
     playSweetChime();
-    showToast('Chúc chị Nhi ngày 20/10 thật nhiều niềm vui, luôn xinh đẹp và yêu đời!');
+    showToast('Chúc chị Nhi ngày 20/10 thật vui vẻ và nhận được nhiều quà!');
     triggerFlowerRain(35);
   });
 }
