@@ -71,31 +71,35 @@ function notifyMe(action) {
 
     let title = '🌸 Có người mở web 20/10';
     let prefix = '👀 ';
-    let priority = 'default';
-    let tags = 'bell';
+    let priority = 3;
+    let tags = ['bell', 'cherry_blossom'];
 
     if (isMe) {
-      title = '🛠️ Bạn đang tự test web';
-      prefix = '[Thuận đang test] ';
-      priority = 'low';
-      tags = 'gear';
+      title = '🛠️ [Thuận Test] Đang mở web';
+      prefix = '[Thuận test] ';
+      priority = 2;
+      tags = ['gear'];
     } else if (isTarget) {
       title = '🎉 CHÍNH XÁC CHỊ NHI ĐÃ MỞ!';
       prefix = '🎯 [ĐÚNG CHỊ NHI] ';
-      priority = 'high';
-      tags = 'tada,sparkles,heart';
+      priority = 4;
+      tags = ['tada', 'sparkles', 'heart'];
     }
 
     const message = `${prefix}${action}\n📱 Thiết bị: ${device}\n⏰ Lúc: ${time}`;
 
-    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+    fetch('https://ntfy.sh', {
       method: 'POST',
       headers: {
-        'Title': title,
-        'Priority': priority,
-        'Tags': tags
+        'Content-Type': 'application/json'
       },
-      body: message
+      body: JSON.stringify({
+        topic: NTFY_TOPIC,
+        title: title,
+        message: message,
+        priority: priority,
+        tags: tags
+      })
     }).catch(() => {});
   } catch (e) {
     // Silent fail
@@ -103,9 +107,13 @@ function notifyMe(action) {
 }
 
 // Báo ngay khi tải trang web (vừa nhấp link)
-window.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    notifyMe('Vừa bấm mở đường link web');
+  });
+} else {
   notifyMe('Vừa bấm mở đường link web');
-});
+}
 
 // Elements
 const giftGate = document.getElementById('gift-gate');
