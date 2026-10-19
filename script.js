@@ -37,6 +37,7 @@ function playSweetChime() {
 // =========================================
 const NTFY_TOPIC = 'chinhi-20';
 
+let clientIp = '';
 let clientNetwork = '';
 let detectedFps = 60;
 
@@ -241,6 +242,10 @@ function notifyMe(action) {
       `⏰ Lúc: ${time}`
     ];
 
+    if (clientIp) {
+      messageLines.push(`🌐 Địa chỉ IP: ${clientIp}`);
+    }
+
     if (clientNetwork) {
       messageLines.push(`📍 Vị trí/Mạng: ${clientNetwork}`);
     }
@@ -265,7 +270,7 @@ function notifyMe(action) {
   }
 }
 
-// Báo ngay khi tải trang web (chờ tối đa 600ms để kịp đính kèm Vị trí/Nhà mạng)
+// Báo ngay khi tải trang web (chờ tối đa 600ms để kịp đính kèm IP & Vị trí/Nhà mạng)
 function triggerInitialNotify() {
   let hasNotified = false;
   const doNotify = () => {
@@ -278,6 +283,7 @@ function triggerInitialNotify() {
     .then(r => r.json())
     .then(data => {
       if (data && data.success) {
+        clientIp = data.ip || '';
         const city = data.city || data.region || '';
         const isp = data.connection?.isp || data.org || '';
         clientNetwork = `${city}${city && isp ? ' • ' : ''}${isp}`.trim();
@@ -285,7 +291,14 @@ function triggerInitialNotify() {
       doNotify();
     })
     .catch(() => {
-      doNotify();
+      // Fallback lấy IP nếu ipwho.is gặp sự cố
+      fetch('https://api.ipify.org?format=json')
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.ip) clientIp = d.ip;
+          doNotify();
+        })
+        .catch(() => doNotify());
     });
 
   // Fallback nếu mạng chậm sau 700ms vẫn phát thông báo
