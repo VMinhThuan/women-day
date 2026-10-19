@@ -3,52 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chúc mừng 20/10 chị Nhi</title>
-  <meta name="description" content="Một tấm thiệp hồng pastel dễ thương dành riêng cho chị Nhi.">
+  <title>Món quà nhỏ gửi chị Nhi ✨ 20/10</title>
+  <meta name="description" content="Tấm thiệp nhỏ gửi tặng chị Nhi nhân ngày Phụ nữ Việt Nam 20/10.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="petal petal-one">♥</div><div class="petal petal-two">✦</div><div class="petal petal-three">♥</div>
-  <main class="page-shell">
-    <section class="hero-card" aria-labelledby="page-title">
-      <div class="art-panel mosaic-reveal" aria-label="Công chúa tóc dài dịu dàng cầm bó hoa hồng">
-        <span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span>
-        <span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span>
-        <span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span><span class="mosaic-tile"></span>
+
+  <!-- Background floating elements -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="petal-particle p1">🌸</div>
+  <div class="petal-particle p2">✨</div>
+  <div class="petal-particle p3">🌷</div>
+  <div class="petal-particle p4">💖</div>
+
+  <!-- SCREEN 1: MÀN HÌNH HỘP QUÀ TẶNG (GATE SCREEN) -->
+  <section id="gift-gate" class="gift-gate" aria-label="Mở quà tặng">
+    <div class="gift-container">
+      <div class="gift-sparkles" aria-hidden="true">
+        <span>✨</span><span>🌸</span><span>✨</span>
       </div>
+      <p class="gift-subtitle">GỬI CHỊ NHI</p>
+      <h1 class="gift-title">Có một món quà nhỏ dành riêng cho chị 🎀</h1>
+      <p class="gift-desc">Một chút ngọt ngào nhân ngày Phụ nữ Việt Nam 20/10</p>
+
+      <!-- Interactive 3D Gift Box -->
+      <div id="gift-box-btn" class="gift-box-wrapper" role="button" tabindex="0" aria-label="Bấm để mở hộp quà">
+        <div class="gift-box">
+          <div class="gift-lid">
+            <div class="ribbon-bow">
+              <span class="bow-left"></span>
+              <span class="bow-right"></span>
+              <span class="bow-center"></span>
+            </div>
+            <div class="lid-stripe"></div>
+          </div>
+          <div class="gift-body">
+            <div class="body-stripe"></div>
+          </div>
+        </div>
+        <div class="gift-shadow"></div>
+      </div>
+
+      <button id="open-gift-btn" class="open-gift-button">
+        <span>Bấm để mở quà ✨</span>
+      </button>
+      <p class="gift-hint">Chạm vào hộp quà để khám phá nhé!</p>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: NỘI DUNG THIỆP CHÍNH (HIỂN THỊ SAU KHI MỞ QUÀ) -->
+  <main id="main-content" class="page-shell hidden" aria-hidden="true">
+    
+    <!-- Hero Letter Card -->
+    <section class="hero-card" aria-labelledby="card-title">
+      <div class="art-panel">
+        <img src="assets/princess-bouquet.png" alt="Công chúa và hoa ngọt ngào" class="hero-image">
+        <div class="art-overlay"></div>
+        <div class="art-badge">Happy Women's Day 20.10 🌸</div>
+      </div>
+      
       <div class="letter-panel">
-        <p class="eyebrow">GỬI CHỊ NHI THÂN MẾN</p>
-        <h1 id="page-title">Một ngày thật xinh<br>cho nàng công chúa</h1>
-        <div class="mini-flower" aria-hidden="true">✿</div>
-        <p>Nhân ngày 20/10, chúc chị luôn rạng rỡ, vui tươi và dịu dàng theo cách thật riêng của mình.</p>
-        <p>Và vì biết chị rất thích những chiếc đầm xinh, mong chị sẽ luôn có thật nhiều dịp để diện những chiếc váy mình yêu — thật tự tin, thật duyên dáng và luôn cảm thấy mình là cô gái đẹp nhất.</p>
-        <p class="signature">Thân mến,<br><strong>Em &amp; mọi người</strong></p>
+        <div class="letter-tag">DÀNH TẶNG CHỊ NHI</div>
+        <h2 id="card-title">Chúc chị một ngày 20/10<br><span class="italic-title">thật rạng ngời &amp; an yên</span></h2>
+        
+        <div class="letter-divider">
+          <span>🌸</span>
+        </div>
+
+        <div class="letter-body">
+          <p>Nhân ngày Phụ nữ Việt Nam 20/10, chúc chị luôn tràn ngập niềm vui, mỗi ngày đều ngập tràn năng lượng tích cực và nụ cười thật tươi.</p>
+          <p>Chúc chị luôn xinh đẹp, tự tin diện những bộ váy mình yêu thích và luôn tỏa sáng với nét duyên dáng, dịu dàng của riêng mình.</p>
+          <p>Mong rằng mọi điều may mắn, nhẹ nhàng và ngọt ngào nhất sẽ luôn đồng hành cùng chị trong công việc và cuộc sống!</p>
+        </div>
+
+        <div class="letter-footer">
+          <p class="signature-note">Thân mến,</p>
+          <p class="signature-name">Gửi đến chị những lời chúc tốt đẹp nhất 🌷✨</p>
+        </div>
       </div>
     </section>
-    <section class="name-reveal" aria-label="Tên người nhận">
-      <div class="reveal-line"></div>
-      <p class="reveal-kicker">MÓN QUÀ NHỎ NÀY DÀNH CHO</p>
-      <h2 class="recipient-name" data-name="Hoàng Trần Hoài Nhi">Hoàng Trần Hoài Nhi</h2>
-      <p class="reveal-caption">một nàng thơ luôn yêu những chiếc đầm xinh</p>
-      <div class="reveal-line"></div>
-    </section>
-    <section class="wishes" aria-labelledby="wish-title">
-      <p class="eyebrow">NHỮNG ĐIỀU NHỎ XINH</p>
-      <h2 id="wish-title">Chọn một bó hoa cho chị nhé</h2>
-      <p class="section-note">Chạm vào mỗi bó hoa để nhận một lời chúc đáng yêu.</p>
+
+    <!-- Sweet Wish Interactive Cards -->
+    <section class="wishes-section" aria-labelledby="wishes-heading">
+      <div class="section-header">
+        <span class="section-tag">NHỮNG ĐIỀU NGỌT NGÀO</span>
+        <h3 id="wishes-heading">Chọn một bó hoa cho chị nhé 💐</h3>
+        <p class="section-subtitle">Chạm vào từng bức ảnh để nhận một lời chúc nhỏ xinh</p>
+      </div>
+
       <div class="wish-grid">
-        <button class="wish-card" data-message="Mong chị luôn tìm được chiếc đầm làm chị mỉm cười ngay từ lần đầu thử. ✿"><img src="assets/princess-bouquet.png" alt="Bó hoa hồng pastel"><span>Đầm xinh mỗi ngày</span></button>
-        <button class="wish-card" data-message="Chúc chị có thật nhiều buổi hẹn hò nhẹ nhàng, để diện chiếc váy mình thích và tỏa sáng theo cách rất riêng. ♡"><img src="assets/bouquet.jpg" alt="Bó hoa hồng"><span>Buổi hẹn dịu dàng</span></button>
-        <button class="wish-card" data-message="Mong mọi khoảnh khắc của chị đều rực rỡ như một vườn hoa, tự tin và đầy niềm vui. ✦"><img src="assets/cute_bunny.jpg" alt="Hoa trong khu vườn dễ thương"><span>Luôn rạng rỡ</span></button>
+        <!-- Card 1 -->
+        <button class="wish-card" data-message="Chúc chị mỗi ngày mở tủ đồ đều chọn được bộ váy ưng ý nhất và bước ra đường với sự tự tin, rạng rỡ! 👗✨">
+          <div class="card-img-wrap">
+            <img src="assets/princess-bouquet.png" alt="Váy xinh rạng rỡ">
+          </div>
+          <div class="card-info">
+            <span class="card-icon">👗</span>
+            <h4>Luôn Xinh Đẹp</h4>
+            <p>Tự tin &amp; tỏa sáng mỗi ngày</p>
+          </div>
+        </button>
+
+        <!-- Card 2 -->
+        <button class="wish-card" data-message="Chúc chị luôn tìm thấy niềm vui trong những điều bình dị, tâm trạng lúc nào cũng thư thái và ngọt ngào! 🌷🍀">
+          <div class="card-img-wrap">
+            <img src="assets/bouquet.jpg" alt="Bó hoa ngọt ngào">
+          </div>
+          <div class="card-info">
+            <span class="card-icon">🌸</span>
+            <h4>An Yên &amp; Dịu Dàng</h4>
+            <p>Mỗi ngày đều nhẹ nhàng, vui vẻ</p>
+          </div>
+        </button>
+
+        <!-- Card 3 -->
+        <button class="wish-card" data-message="Chúc chị luôn ngập tràn tiếng cười, công việc suôn sẻ và gặp thật nhiều may mắn trên mọi chặng đường! 💖🌟">
+          <div class="card-img-wrap">
+            <img src="assets/cute_bunny.jpg" alt="Thỏ con đáng yêu">
+          </div>
+          <div class="card-info">
+            <span class="card-icon">✨</span>
+            <h4>Ngập Tràn May Mắn</h4>
+            <p>Niềm vui &amp; nhiều điều bất ngờ</p>
+          </div>
+        </button>
       </div>
     </section>
-    <button id="celebrate-btn" class="celebrate-btn">Gửi một cơn mưa hoa cho chị</button>
-    <p class="footer-note">20.10 · Dành riêng cho chị Nhi</p>
+
+    <!-- Action Buttons -->
+    <div class="actions-area">
+      <button id="rain-btn" class="magic-btn">
+        <span class="btn-icon">🌸</span> Thả cơn mưa hoa chúc mừng
+      </button>
+      <button id="rewatch-btn" class="ghost-btn">
+        <span>🎁</span> Đóng lại hộp quà
+      </button>
+    </div>
+
+    <footer class="page-footer">
+      <p>Happy Vietnamese Women's Day · 20.10 ✨</p>
+    </footer>
   </main>
+
+  <!-- Notification Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Audio Context Canvas Confetti & Script -->
   <script src="script.js"></script>
 </body>
 </html>
